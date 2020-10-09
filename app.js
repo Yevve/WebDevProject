@@ -15,8 +15,13 @@ response.render("start.hbs")
 app.get("/about",function(request,response){
     response.render("about.hbs")
 })
+
 app.get("/contact",function(request,response){
     response.render("contact.hbs")
+})
+
+app.get("/blog",function(request,response){
+    response.render("blog.hbs")
 })
 
 
