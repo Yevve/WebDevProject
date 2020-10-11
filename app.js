@@ -41,6 +41,14 @@ app.get("/blogs",function(request,response){
 
 })
 
+app.post("/delete-blog/:id",function(request,response){
+    const id = request.params.id
+    const blogIndex = blogs.findIndex(
+        b => b.id==id
+        )
+        blogs.splice(blogIndex,1)
+        response.redirect("/blogs")
+})
 app.get("/blogs/:id",function(request,response){
     const id = request.params.id
 

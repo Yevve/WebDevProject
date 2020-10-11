@@ -1,4 +1,12 @@
 <h1>Blog</h1>
+{{#if blog}}
 <p>Title:{{blog.title}}</p>
 <p>Post:{{blog.blogpost}}</p>
 <p>ID:{{blog.id}}</p>
+
+<form action="/delete-blog/{{blog.id}}" method="post">
+<input type="submit" value="Delete">
+</form>
+{{else}}
+    <p>No blogs with that ID exists</p>
+{{/if}}
