@@ -1,0 +1,22 @@
+<section class="hero is-dark is-fullheight is-bold">
+  <div class="hero-body">
+    <div class="container is-centered has-background-grey-dark">
+      <div class="content has-text-justified is-large">
+        {{#if blogs.length}}
+          <ul>
+            
+              {{#each blogs}}
+                <li>
+                 <a href="/blogs/{{id}}">{{title}}</a> 
+                </li>
+              {{/each}}
+            
+          </ul>
+          {{else}}
+            <p>There are no blogs posted</p>
+          {{/if}}
+      
+  </div>
+  </div>
+  </div>
+</section>

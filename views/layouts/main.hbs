@@ -36,9 +36,14 @@
       <a class="navbar-item" href="/contact">
         Contact
       </a> 
-      <a class="navbar-item" href="/blog">
-        Blog
+      <a class="navbar-item" href="/blogs">
+        Blogs
       </a> 
+      {{#if isLoggedIn}}
+      <a class="navbar-item" href="/create-blogpost">
+        Create Blogpost
+      </a> 
+      {{/if}}
       
 </div>
     <div class="navbar-end">
