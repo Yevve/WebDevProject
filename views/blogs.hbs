@@ -2,6 +2,10 @@
   <div class="hero-body">
     <div class="container is-centered has-background-grey-dark">
       <div class="content has-text-justified is-large">
+        {{#if dbError}}
+          <p>Can not display the page, try again later</p>
+          {{else}}
+        
         {{#if blogs.length}}
           <ul>
             
@@ -15,7 +19,7 @@
           {{else}}
             <p>There are no blogs posted</p>
           {{/if}}
-      
+       {{/if}}
   </div>
   </div>
   </div>

@@ -1,0 +1,18 @@
+<h1>Update Page</h1>
+{{#if validationErrors.length}}
+<p>Could not create a blog</p>
+<ul>
+    {{#each validationErrors}}
+    <li>{{this}}</li>
+    {{/each}}
+</ul>
+{{/if}}
+<form action="" method="post">
+    <div>
+        <input type="text" name="title" value="{{blog.title}}">
+    </div>
+    <div>
+        <input type="text" name="blogpost" value="{{blog.blogpost}}">
+    </div>
+    <input type="submit"value="Update">
+</form>
