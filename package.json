@@ -14,8 +14,8 @@
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "express-session": "^1.17.1",
-    "express-sessions": "^1.0.6",
     "node-gyp": "^7.1.0",
+    "node-pre-gyp": "^0.15.0",
     "sqlite3": "^5.0.0"
   }
 }

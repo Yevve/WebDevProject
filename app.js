@@ -3,7 +3,10 @@ const expressHandlebars = require('express-handlebars')
 const bodyParser=require('body-parser')
 const sqlite3=require('sqlite3')
 const expressSession=require('express-session')
+const SQLiteStore=require('connect-sqlite3')(expressSession)
 const { query } = require('express')
+const session = require('express-session')
+
 
 const db = new sqlite3.Database("website-database.db")
 const app = express()
@@ -24,8 +27,8 @@ app.engine(".hbs",expressHandlebars({
 app.use(expressSession({
     secret:"asdfasdf",
     saveUninitialized:false,
-    resave:false
-
+    resave:false,
+    store: new SQLiteStore
 
 }))
 app.use(express.static("static"))
