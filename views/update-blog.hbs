@@ -1,4 +1,7 @@
-<h1>Update Page</h1>
+<section class="hero is-large is-dark is-bold">
+  <div class="hero-body">
+    <div class="container">
+<h1>Update Blog</h1>
 {{#if validationErrors.length}}
 <p>Could not create a blog</p>
 <ul>
@@ -9,10 +12,13 @@
 {{/if}}
 <form action="" method="post">
     <div>
-        <input type="text" name="title" value="{{blog.title}}">
+       Title:<input  required type="text" class="input is-normal is-warning" name="title" value="{{blog.title}}">
     </div>
     <div>
-        <input type="text" name="blogpost" value="{{blog.blogpost}}">
+        Post:<textarea required class="textarea is-large is-warning" input="text" name="blogpost" >{{blog.blogpost}}</textarea>
     </div>
-    <input type="submit"value="Update">
+    <input type="submit" class="button is-warning" value="Update">
 </form>
+</div>
+  </div>
+</section>

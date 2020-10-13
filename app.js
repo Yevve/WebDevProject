@@ -64,11 +64,20 @@ app.get("/about",function(request,response){
 app.get("/contact",function(request,response){
     response.render("contact.hbs")
 })
-
+function getValErrorFromMessage(message){
+    const validationError=[]
+    if(message.message ==0){
+        validationError.push("Message window can not be empty")
+    }
+    return validationError
+}
 app.post("/contact",function(request,response){
     const message = request.body.message
-    const query="INSERT INTO messages (message) VALUES(?)"
+    const validationErrors= getValErrorFromMessage(message)
+    if(validationErrors.length==0){
+        const query="INSERT INTO messages (message) VALUES(?)"
     const values= [message]
+
     db.run(query,values,function(error){
         if(error){
             console.log(error)
@@ -77,6 +86,13 @@ app.post("/contact",function(request,response){
             response.redirect("/messages/"+this.lastID)
         }
     })
+    }else{
+        const model={
+            validationErrors,
+            message
+        }
+        response.render("contact.hbs",model)
+    }
 })
 app.get("/messages",function(request,response){
     const query ="SELECT * FROM messages ORDER BY id"
@@ -120,6 +136,7 @@ app.get("/messages/:id",function(request,response){
     }) 
 
 })
+
 app.get("/update-message/:id",function(request,response){
     const id= request.params.id
     const query ="SELECT * FROM messages WHERE id=?"
@@ -176,7 +193,7 @@ app.post("/delete-message/:id",function(request,response){
         if(error){
             console.log(error)
         }else{
-           response.redirect("/messages") 
+           response.redirect("/") 
         }
     })
         
@@ -200,13 +217,7 @@ app.get("/blogs",function(request,response){
     
 
 })
-function getValErrorFromMessage(message){
-    const validationErrors=[]
-    if(message.message ==0){
-        validationErrors.push("Message window can not be empty")
-    }
-    return validationErrors
-}
+
 function getValErrorFromBlog(title,blogpost){
 
     const validationErrors=[]
@@ -355,7 +366,7 @@ app.post("/login",function(request,response){
         request.session.isLoggedIn=true
         response.redirect("/")
     }else{
-        //error msg
+        //error message
         response.redirect("/blogs")
     }
 })

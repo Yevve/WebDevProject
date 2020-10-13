@@ -10,7 +10,7 @@
 <p>ID:{{blog.id}}</p>
 {{#if isLoggedIn}}
 
-<a class="button is-dark" href="/update-blog/{{blog.id}}">Update</a>
+<a class="button is-warning" href="/update-blog/{{blog.id}}">Update</a>
 
 <form action="/delete-blog/{{blog.id}}" method="post">
 <input type="submit" class="button is-warning is-pulled-right" value="Delete">
