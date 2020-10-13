@@ -1,0 +1,22 @@
+<section class="hero is-large is-dark is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Message:
+      </h1>
+{{#if message}}
+<p>Message:{{message.message}}</p>
+<p>ID:{{message.id}}</p>
+
+<a class="button is-dark" href="/update-message/{{message.id}}">Update</a>
+
+<form action="/delete-message/{{message.id}}" method="post">
+<input type="submit" class="button is-warning is-pulled-right" value="Delete">
+</form>
+
+{{else}}
+    <p>No message with that ID exists</p>
+{{/if}}
+</div>
+  </div>
+</section>

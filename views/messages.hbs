@@ -1,26 +1,28 @@
+
+
 <section class="hero is-dark is-fullheight is-bold">
   <div class="hero-body">
-    <h1 class="title">
-        Blogs:
-      </h1>
+      <h1 class="title">
+        Messages:
+      </h1>  
     <div class="container is-centered has-background-grey-dark">
       <div class="content has-text-justified is-large">
         {{#if dbError}}
           <p>Can not display the page, try again later</p>
           {{else}}
         
-        {{#if blogs.length}}
+        {{#if message.length}}
           <ul>
             
-              {{#each blogs}}
+              {{#each message}}
                 <li>
-                 <a href="/blogs/{{id}}">{{title}}</a> 
+                 <a href="/messages/{{id}}">{{message}}</a> 
                 </li>
               {{/each}}
             
           </ul>
           {{else}}
-            <p>There are no blogs posted</p>
+            <p>There are no messages</p>
           {{/if}}
        {{/if}}
   </div>

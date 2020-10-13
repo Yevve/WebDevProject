@@ -1,4 +1,9 @@
-<h1>Blog</h1>
+<section class="hero is-large is-dark is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Blog:
+      </h1>
 {{#if blog}}
 <p>Title:{{blog.title}}</p>
 <p>Post:{{blog.blogpost}}</p>
@@ -8,9 +13,12 @@
 <a class="button is-dark" href="/update-blog/{{blog.id}}">Update</a>
 
 <form action="/delete-blog/{{blog.id}}" method="post">
-<input type="submit" class="button is-warning" value="Delete">
+<input type="submit" class="button is-warning is-pulled-right" value="Delete">
 </form>
 {{/if}}
 {{else}}
     <p>No blogs with that ID exists</p>
 {{/if}}
+</div>
+</div>
+</section>

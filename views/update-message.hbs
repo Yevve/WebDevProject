@@ -1,0 +1,21 @@
+<section class="hero is-large is-dark is-bold">
+  <div class="hero-body">
+    <div class="container">
+<h1>Update Message</h1>
+{{#if validationErrors.length}}
+<p>Could not send a message</p>
+<ul>
+    {{#each validationErrors}}
+    <li>{{this}}</li>
+    {{/each}}
+</ul>
+{{/if}}
+<form action="" method="post">
+    <div>
+        <textarea class="textarea is-large is-warning" input="text" name="message" >{{message.message}}</textarea>
+    </div>
+    <input class="button is-warning" type="submit"value="Update">
+</form>
+</div>
+  </div>
+</section>

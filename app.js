@@ -18,6 +18,13 @@ CREATE TABLE IF NOT EXISTS blogs (
     blogpost TEXT
 )
 `)
+
+db.run(`
+CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message TEXT
+)
+`)
 const trueUsername="admin"
 const truePassword="admin123"
 
@@ -57,6 +64,123 @@ app.get("/about",function(request,response){
 app.get("/contact",function(request,response){
     response.render("contact.hbs")
 })
+
+app.post("/contact",function(request,response){
+    const message = request.body.message
+    const query="INSERT INTO messages (message) VALUES(?)"
+    const values= [message]
+    db.run(query,values,function(error){
+        if(error){
+            console.log(error)
+        }else{
+
+            response.redirect("/messages/"+this.lastID)
+        }
+    })
+})
+app.get("/messages",function(request,response){
+    const query ="SELECT * FROM messages ORDER BY id"
+
+    db.all(query,function(error,message){
+        if(error){
+            console.log(error)
+
+        }else{
+    const model={
+        message 
+    }
+
+    response.render("messages.hbs",model)
+    }
+    })
+
+
+})
+app.get("/messages/:id",function(request,response){
+    const id = request.params.id
+
+    const query ="SELECT * FROM messages WHERE id =?"
+    const values=[id]
+    db.get(query,values,function(error,message){
+        if(error){
+            console.log(error)
+            const model={
+                dbError:true
+            }
+            response.render("message.hbs",model) 
+        }else{
+           const model={
+        message,
+        dbError:false
+    }
+
+    response.render("message.hbs",model) 
+        }
+        
+    }) 
+
+})
+app.get("/update-message/:id",function(request,response){
+    const id= request.params.id
+    const query ="SELECT * FROM messages WHERE id=?"
+    const values =[id]
+    db.get(query,values,function(error,message){
+        if(error){
+            console.log(error)
+        }else{
+            const model={
+                message
+            }
+            response.render("update-message.hbs",model)
+        }
+    })
+    
+})
+app.post("/update-message/:id",function(request,response){
+    const id = request.params.id
+    const newMessage=request.body.message
+    const validationErrors= getValErrorFromMessage(newMessage)
+    if(validationErrors==0){
+        const query=`
+        UPDATE
+            messages
+        SET
+            message=?
+        WHERE
+            id=?`
+        const values =[newMessage,id]
+        db.run(query,values,function(error){
+            if(error){
+                console.log(error)
+            }else{
+                response.redirect("/messages/"+id)
+            }
+        })
+    }else{
+        const model={
+            message:{
+                id,
+                message:newMessage
+            },
+            validationErrors
+        }
+        response.render("update-message.hbs",model)
+    }
+    
+})
+app.post("/delete-message/:id",function(request,response){
+    const id = request.params.id
+    const query="DELETE FROM messages WHERE id=?"
+    const values=[id]
+    db.run(query,values,function(error){
+        if(error){
+            console.log(error)
+        }else{
+           response.redirect("/messages") 
+        }
+    })
+        
+})
 app.get("/blogs",function(request,response){
     const query ="SELECT * FROM blogs ORDER BY id"
 
@@ -76,6 +200,13 @@ app.get("/blogs",function(request,response){
     
 
 })
+function getValErrorFromMessage(message){
+    const validationErrors=[]
+    if(message.message ==0){
+        validationErrors.push("Message window can not be empty")
+    }
+    return validationErrors
+}
 function getValErrorFromBlog(title,blogpost){
 
     const validationErrors=[]
