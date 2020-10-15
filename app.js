@@ -4,6 +4,7 @@ const bodyParser=require('body-parser')
 const sqlite3=require('sqlite3')
 const expressSession=require('express-session')
 const SQLiteStore=require('connect-session-knex')(expressSession)
+const bcrypt=require('bcryptjs')
 const { query } = require('express')
 
 
@@ -11,6 +12,17 @@ const { query } = require('express')
 const db = new sqlite3.Database("website-database.db")
 const app = express()
 
+const saltRounds=10
+const yourPassword="admin123"
+db.run(`
+CREATE TABLE IF NOT EXISTS user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userName TEXT,
+    hashPassword TEXT
+)
+
+
+`)
 db.run(`
 CREATE TABLE IF NOT EXISTS blogs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,6 +37,8 @@ CREATE TABLE IF NOT EXISTS messages (
     message TEXT
 )
 `)
+
+
 const trueUsername="admin"
 const truePassword="admin123"
 
@@ -362,13 +376,26 @@ app.get("/login",function(request,response){
 app.post("/login",function(request,response){
     const enteredUsername=request.body.username
     const enteredPassword=request.body.password
-    if(enteredUsername==trueUsername && enteredPassword==truePassword){
+    const query="SELECT * FROM user WHERE userName=?"
+    const values=[enteredUsername]
+    db.all(query,values,function(error,user){
+        if(error){
+            console.log(error) 
+        }else{
+            if(user.length){
+         if(enteredUsername==user[0].userName && bcrypt.compareSync(enteredPassword, user[0].hashPassword)){
         request.session.isLoggedIn=true
         response.redirect("/")
     }else{
         //error message
         response.redirect("/blogs")
-    }
+    } 
+      }else{
+          response.redirect("/")
+      }
+        }   
+    })
+    
 })
 
 app.post("/logout",function(request,response){
