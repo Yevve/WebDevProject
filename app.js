@@ -13,7 +13,16 @@ const db = new sqlite3.Database("website-database.db")
 const app = express()
 
 const saltRounds=10
-const yourPassword="admin123"
+
+db.run(`
+CREATE TABLE IF NOT EXISTS comments(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    bpId INTEGER,
+    comment TEXT
+)
+
+
+`)
 db.run(`
 CREATE TABLE IF NOT EXISTS user(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,13 +43,10 @@ CREATE TABLE IF NOT EXISTS blogs (
 db.run(`
 CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    message TEXT
+    message TEXT,
+    randomId TEXT
 )
 `)
-
-
-const trueUsername="admin"
-const truePassword="admin123"
 
 app.engine(".hbs",expressHandlebars({
     defaultLayout:"main.hbs"
@@ -87,17 +93,18 @@ function getValErrorFromMessage(message){
 }
 app.post("/contact",function(request,response){
     const message = request.body.message
+    const randomId=makeid(10)
     const validationErrors= getValErrorFromMessage(message)
     if(validationErrors.length==0){
-        const query="INSERT INTO messages (message) VALUES(?)"
-    const values= [message]
+        const query="INSERT INTO messages (message,randomId) VALUES(?,?)"
+    const values= [message,randomId]
 
     db.run(query,values,function(error){
         if(error){
             console.log(error)
         }else{
 
-            response.redirect("/messages/"+this.lastID)
+            response.redirect("/messages/"+randomId)
         }
     })
     }else{
@@ -126,10 +133,10 @@ app.get("/messages",function(request,response){
 
 
 })
-app.get("/messages/:id",function(request,response){
-    const id = request.params.id
+app.get("/messages/:randomId",function(request,response){
+    const id = request.params.randomId
 
-    const query ="SELECT * FROM messages WHERE id =?"
+    const query ="SELECT * FROM messages WHERE randomId =?"
     const values=[id]
     db.get(query,values,function(error,message){
         if(error){
@@ -151,9 +158,9 @@ app.get("/messages/:id",function(request,response){
 
 })
 
-app.get("/update-message/:id",function(request,response){
-    const id= request.params.id
-    const query ="SELECT * FROM messages WHERE id=?"
+app.get("/update-message/:randomId",function(request,response){
+    const id= request.params.randomId
+    const query ="SELECT * FROM messages WHERE randomId=?"
     const values =[id]
     db.get(query,values,function(error,message){
         if(error){
@@ -167,8 +174,8 @@ app.get("/update-message/:id",function(request,response){
     })
     
 })
-app.post("/update-message/:id",function(request,response){
-    const id = request.params.id
+app.post("/update-message/:randomId",function(request,response){
+    const id = request.params.randomId
     const newMessage=request.body.message
     const validationErrors= getValErrorFromMessage(newMessage)
     if(validationErrors==0){
@@ -178,7 +185,7 @@ app.post("/update-message/:id",function(request,response){
         SET
             message=?
         WHERE
-            id=?`
+            randomId=?`
         const values =[newMessage,id]
         db.run(query,values,function(error){
             if(error){
@@ -199,9 +206,9 @@ app.post("/update-message/:id",function(request,response){
     }
     
 })
-app.post("/delete-message/:id",function(request,response){
-    const id = request.params.id
-    const query="DELETE FROM messages WHERE id=?"
+app.post("/delete-message/:randomId",function(request,response){
+    const id = request.params.randomId
+    const query="DELETE FROM messages WHERE randomId=?"
     const values=[id]
     db.run(query,values,function(error){
         if(error){
@@ -212,6 +219,23 @@ app.post("/delete-message/:id",function(request,response){
     })
         
 })
+app.post("/comment/:id",function(request,response){
+    const id = request.params.id
+    const comment= request.body.comment
+    const query="INSERT INTO comments (bpId,comment) VALUES(?,?)"
+    const values=[id,comment]
+    
+    db.run(query,values,function(error){
+        if(error){
+            console.log(error)
+        }else{
+
+            response.redirect("/blogs/"+id)
+        }
+    })
+})
+
+
 app.get("/blogs",function(request,response){
     const query ="SELECT * FROM blogs ORDER BY id"
 
@@ -402,6 +426,16 @@ app.post("/logout",function(request,response){
     request.session.isLoggedIn=false
     response.redirect("/")
 })
+
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
 
 app.listen(3000)
 

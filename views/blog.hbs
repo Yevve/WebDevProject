@@ -5,17 +5,29 @@
         Blog:
       </h1>
 {{#if blog}}
-<p>Title:{{blog.title}}</p>
-<p>Post:{{blog.blogpost}}</p>
+<p class="title">Title: {{blog.title}}</p>
 <p>ID:{{blog.id}}</p>
+<p>Post: {{blog.blogpost}}</p>
+
 {{#if isLoggedIn}}
-
-<a class="button is-warning" href="/update-blog/{{blog.id}}">Update</a>
-
+<div class="column is-3"></div>
 <form action="/delete-blog/{{blog.id}}" method="post">
-<input type="submit" class="button is-warning is-pulled-right" value="Delete">
+<input type="submit" class="button is-warning is-pulled-right" value="Delete Post">
 </form>
+
+<a class="button is-warning" href="/update-blog/{{blog.id}}">Update Post</a>
+
+
 {{/if}}
+<div class="column is-3"></div>
+<form action="/comment/{{blog.id}}" method="POST">
+      <div>
+    <textarea required class="textarea is-large is-warning" input="text" name="comment" value="Write a comment"></textarea>
+    </div>
+    <input type="submit" class="button is-warning" value="Comment">
+
+</form>
+    
 {{else}}
     <p>No blogs with that ID exists</p>
 {{/if}}

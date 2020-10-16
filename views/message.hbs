@@ -8,9 +8,9 @@
 <p>Message:{{message.message}}</p>
 <p>ID:{{message.id}}</p>
 
-<a class="button is-warning" href="/update-message/{{message.id}}">Update</a>
+<a class="button is-warning" href="/update-message/{{message.randomId}}">Update</a>
 
-<form action="/delete-message/{{message.id}}" method="post">
+<form action="/delete-message/{{message.randomId}}" method="post">
 <input type="submit" class="button is-warning is-pulled-right" value="Delete">
 </form>
 
