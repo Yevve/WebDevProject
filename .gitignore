@@ -1,3 +1,5 @@
 node_modules/
 website-database/
-*.db
+*.db/
+connect-session-knex/
+*.sqlite
