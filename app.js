@@ -74,7 +74,21 @@ app.use(function(request,response,next){
 })
 
 app.get("/",function(request,response){
-response.render("start.hbs")
+    const query ="SELECT * FROM blogs ORDER BY id"
+
+    db.all(query,function(error,blogs){
+        if(error){
+            console.log(error)
+
+        }else{
+    const model={
+        blogs 
+    }
+    response.render("start.hbs",model)
+    }
+    })
+
+
 })
 
 app.get("/about",function(request,response){
@@ -235,6 +249,20 @@ app.post("/comment/:id",function(request,response){
     })
 })
 
+app.post("/delete-comment/:id",function(request,response){
+    const id = request.params.id
+    const queryDelete="DELETE FROM comments WHERE id=?"
+    const values=[id]
+    db.run(queryDelete,values,function(error){
+        if(error){
+            console.log(error)
+        }else{
+           response.redirect("/blogs/") 
+        }
+    })
+        
+})
+
 
 app.get("/blogs",function(request,response){
     const query ="SELECT * FROM blogs ORDER BY id"
@@ -332,11 +360,27 @@ app.post("/delete-blog/:id",function(request,response){
     })
         
 })
+
 app.get("/blogs/:id",function(request,response){
     const id = request.params.id
 
-    const query ="SELECT * FROM blogs WHERE id =?"
+    const queryComment="SELECT * FROM comments"
+    var postComment=[]
     const values=[id]
+    db.all(queryComment,function(error,comments){
+        if(error){
+            console.log(error)
+        }else{
+           for(let i=0;i<comments.length;i++){
+            if(comments[i].bpId==id){
+                postComment.push(comments[i])
+
+            }
+           }
+    }
+     }) 
+     
+    const query ="SELECT * FROM blogs WHERE id =?"
     db.get(query,values,function(error,blog){
         if(error){
             console.log(error)
@@ -347,13 +391,15 @@ app.get("/blogs/:id",function(request,response){
         }else{
            const model={
         blog,
-        dbError:false
+        dbError:false,
+        postComment
     }
 
     response.render("blog.hbs",model) 
         }
         
-    }) 
+    })       
+   
 
 })
 app.get("/create-blogpost",function(request,response){

@@ -10,15 +10,45 @@
 <p>Post: {{blog.blogpost}}</p>
 
 {{#if isLoggedIn}}
-<div class="column is-3"></div>
+<div class="column is-2"></div>
 <form action="/delete-blog/{{blog.id}}" method="post">
 <input type="submit" class="button is-warning is-pulled-right" value="Delete Post">
 </form>
 
 <a class="button is-warning" href="/update-blog/{{blog.id}}">Update Post</a>
-
-
 {{/if}}
+
+
+<p class="title">Comments:</p>
+<div class="columns">
+ {{#if postComment.length}}
+          <div class="column">
+          <ul>
+              {{#each postComment}}
+                <li class="text is-size-4 mb-5">
+                 {{this.id}}: {{comment}} 
+                </li>
+              {{/each}}
+              </div>
+
+
+              {{#if isLoggedIn}}
+              <div class="column is-2">
+              {{#each postComment}}
+                
+                  <form action="/delete-comment/{{this.id}}" method="post">
+                  <input type="submit" class="button is-warning mb-5" value="Delete Comment:{{this.id}}">
+                  </form>
+                
+              {{/each}}
+              </div>
+              {{/if}}
+          </ul>
+          {{else}}
+            <p>There are no comments posted</p>
+          {{/if}}
+        </div>  
+
 <div class="column is-3"></div>
 <form action="/comment/{{blog.id}}" method="POST">
       <div>

@@ -1,12 +1,19 @@
 <section class="hero is-dark is-bold">
   <div class="hero-body">
     <div class="container-is-left">
-      <h1 class="title">
-        Home page
-      </h1>
-      <h2 class="subtitle">
-        This is my homepage
-      </h2>
+      <h1 class="title">Welcome to your favorit gaming-blog</h1>
+      <h2 class="title">Latest blogpost:</h2>
+        {{#if blogs.length}}
+              {{#each blogs}}
+                 <a class="title has-text-info" href="/blogs/{{id}}">{{title}}</a> 
+              {{/each}}
+
+          {{else}}
+            <p>There are no blogs posted</p>
+          {{/if}}
+
+      
+      <h3 class="title">Guides to watch:</h3>
       <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/MAOZPgT8kic" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
